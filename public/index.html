@@ -1,31 +1,224 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Confluence Trust Auditor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
-body { font-family: -apple-system, Arial, sans-serif; max-width: 640px; margin: 4rem auto; padding: 0 1.5rem; color: #1b1f23; }
-h1 { margin-bottom: 0.25rem; }
-p { line-height: 1.6; color: #333; }
-a.button { display: inline-block; margin-top: 1.5rem; padding: 10px 20px; background: #0052CC; color: white; text-decoration: none; border-radius: 6px; font-weight: 600; }
-.note { font-size: 0.85rem; color: #6a737d; margin-top: 2rem; }
+  :root {
+    --paper: #F1F4F1;
+    --paper-line: #DAE3DD;
+    --surface: #FFFFFF;
+    --ink: #142723;
+    --ink-soft: #4D625D;
+    --teal: #0F6E63;
+    --teal-soft: #E3F1EE;
+    --flag: #B23A2E;
+    --flag-soft: #F9E9E6;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 4.5rem 1.75rem 5rem;
+  }
+
+  .top {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .seal {
+    flex-shrink: 0;
+    width: 156px;
+    height: 156px;
+    transform: rotate(-7deg);
+    animation: stamp 0.5s cubic-bezier(.2,1.4,.4,1) both;
+  }
+  @keyframes stamp {
+    0%   { transform: rotate(-7deg) scale(2.4); opacity: 0; }
+    60%  { opacity: 1; }
+    100% { transform: rotate(-7deg) scale(1); opacity: 1; }
+  }
+  .seal text {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.3px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    fill: var(--teal);
+  }
+  .seal .ring { fill: none; stroke: var(--teal); }
+  .seal .ring-outer { stroke-width: 1.4; }
+  .seal .ring-inner { stroke-width: 1.4; opacity: 0.55; }
+  .seal .mark { stroke: var(--teal); stroke-width: 3.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2.15rem;
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0 0 0.6rem;
+  }
+
+  .lede {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    line-height: 1.5;
+    max-width: 34ch;
+    margin: 0;
+  }
+
+  p {
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 66ch;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0 3rem;
+  }
+
+  .btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 12px 22px;
+    border-radius: 3px;
+    text-decoration: none;
+    display: inline-block;
+    border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--teal); color: #fff; }
+  .btn-primary:hover { background: #0c5951; }
+  .btn-ghost { color: var(--ink); border-color: var(--paper-line); background: var(--surface); }
+  .btn-ghost:hover { border-color: var(--teal); color: var(--teal); }
+
+  .preview {
+    background: var(--surface);
+    border: 1px solid var(--paper-line);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+  .preview-head {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.5px;
+    color: var(--ink-soft);
+    padding: 0.8rem 1.25rem;
+    border-bottom: 1px solid var(--paper-line);
+  }
+  .entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--paper-line);
+    font-size: 0.92rem;
+  }
+  .entry:last-child { border-bottom: none; }
+  .entry-title { color: var(--ink); }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+  .tag-stale { background: #FBF3D8; color: #7A5B00; }
+  .tag-flag { background: var(--flag-soft); color: var(--flag); }
+
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--paper-line);
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .foot a { color: var(--teal); text-decoration: none; }
+  .foot a:hover { text-decoration: underline; }
+
+  @media (max-width: 620px) {
+    .top { flex-direction: column; align-items: flex-start; gap: 1.75rem; }
+    .lede { max-width: none; }
+  }
 </style>
 </head>
 <body>
-<h1>Confluence Trust Auditor</h1>
-<p>Confluence shows you when a page was last edited, not whether anyone has
-checked it's still accurate. This tool scans a space for pages that have
-gone untouched for a long time and for pages that mention things like
-passwords, salary numbers, or "confidential" that probably shouldn't be
-exposed to AI features reading across a space.</p>
+<div class="wrap">
 
-<p>This demo runs against a small set of sample pages, nothing real. You can
-see the tool's actual output below.</p>
+  <div class="top">
+    <svg class="seal" viewBox="0 0 160 160">
+      <circle class="ring ring-outer" cx="80" cy="80" r="74" />
+      <circle class="ring ring-inner" cx="80" cy="80" r="63" />
+      <path id="ringpath" d="M 80,80 m -50,0 a 50,50 0 1,1 100,0 a 50,50 0 1,1 -100,0" fill="none" />
+      <text>
+        <textPath href="#ringpath" startOffset="0%">CONFLUENCE · TRUST AUDIT · CONFLUENCE · TRUST AUDIT ·</textPath>
+      </text>
+      <path class="mark" d="M56 82 L72 98 L106 60" />
+    </svg>
+    <div>
+      <h1>Confluence Trust Auditor</h1>
+      <p class="lede">Confluence records when a page was edited. It has no record of whether anyone has checked it's still true.</p>
+    </div>
+  </div>
 
-<a class="button" href="/api/demo" target="_blank">Run the live demo</a>
+  <p>This scans a space for two things nobody currently tracks: pages that have sat untouched long enough that nobody can vouch for them, and pages holding passwords, salary figures, or "confidential" notes that probably shouldn't be readable by Rovo or any other AI feature with access to the space.</p>
 
-<p class="note">Source code and setup instructions for running it against a
-real Confluence site are on
-<a href="https://github.com/k-kj0/confluence-trust-auditor">GitHub</a>.</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="/api/demo" target="_blank">Run the live demo</a>
+    <a class="btn btn-ghost" href="https://github.com/k-kj0/confluence-trust-auditor">View source on GitHub</a>
+  </div>
+
+  <div class="preview">
+    <div class="preview-head">Sample findings from the demo space</div>
+    <div class="entry">
+      <span class="entry-title">Production Deploy Runbook</span>
+      <span class="tag tag-stale">694 days untouched</span>
+    </div>
+    <div class="entry">
+      <span class="entry-title">Q3 Compensation Bands (Draft)</span>
+      <span class="tag tag-flag">salary figure exposed</span>
+    </div>
+    <div class="entry">
+      <span class="entry-title">API Gateway Config Notes</span>
+      <span class="tag tag-flag">possible API key</span>
+    </div>
+  </div>
+
+  <div class="foot">
+    <span>Demo runs on sample data only. No real Confluence account is touched.</span>
+    <a href="https://github.com/k-kj0/confluence-trust-auditor#run-it-against-a-real-confluence-site">Setup instructions</a>
+  </div>
+
+</div>
 </body>
 </html>
