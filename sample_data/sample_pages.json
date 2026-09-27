@@ -1,0 +1,39 @@
+{
+  "space_name": "Engineering Wiki (demo data)",
+  "pages": [
+    {
+      "id": "1001",
+      "title": "Production Deploy Runbook",
+      "version": {"createdAt": "2024-11-02T09:00:00.000Z"},
+      "labels": [],
+      "body": "<p>Deploy steps. Contact on-call. SSH key: -----BEGIN RSA PRIVATE KEY----- fake for demo</p>"
+    },
+    {
+      "id": "1002",
+      "title": "New Hire Onboarding Guide",
+      "version": {"createdAt": "2026-08-15T09:00:00.000Z"},
+      "labels": ["reviewed-2026-08"],
+      "body": "<p>Welcome! Here is how to set up your laptop and accounts.</p>"
+    },
+    {
+      "id": "1003",
+      "title": "Q3 Compensation Bands (Draft)",
+      "version": {"createdAt": "2025-03-01T09:00:00.000Z"},
+      "labels": [],
+      "body": "<p>Internal only. Salary band for Senior Engineer: $145,000 - $170,000.</p>"
+    },
+    {
+      "id": "1004",
+      "title": "API Gateway Config Notes",
+      "version": {"createdAt": "2026-07-01T09:00:00.000Z"},
+      "labels": [],
+      "body": "<p>api_key: sk_live_EXAMPLE_NOT_REAL_1234567890 used for staging tests</p>"    },
+    {
+      "id": "1005",
+      "title": "Team Working Agreement",
+      "version": {"createdAt": "2026-09-10T09:00:00.000Z"},
+      "labels": [],
+      "body": "<p>We do standups at 10am and retros every other Friday.</p>"
+    }
+  ]
+}
